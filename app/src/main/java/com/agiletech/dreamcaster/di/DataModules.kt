@@ -3,8 +3,10 @@ package com.agiletech.dreamcaster.di
 import android.content.Context
 import androidx.room.Room
 import com.agiletech.dreamcaster.data.DreamsDataSource
+import com.agiletech.dreamcaster.data.TagsDataSource
 import com.agiletech.dreamcaster.data.local.DreamsLocalDataSource
 import com.agiletech.dreamcaster.data.local.LocalDatabase
+import com.agiletech.dreamcaster.data.local.TagsLocalDataSource
 import com.agiletech.dreamcaster.data.repository.DreamsRepositoryImpl
 import com.agiletech.dreamcaster.domain.repository.DreamsRepository
 import dagger.Module
@@ -22,10 +24,11 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideDreamsRepository(
-        localDataSource: DreamsDataSource,
+        dreamsLocalDataSource: DreamsDataSource,
+        tagsLocalDataSource: TagsDataSource,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): DreamsRepository {
-        return DreamsRepositoryImpl(localDataSource, ioDispatcher)
+        return DreamsRepositoryImpl(dreamsLocalDataSource, tagsLocalDataSource, ioDispatcher)
     }
 }
 
@@ -35,11 +38,20 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideTasksLocalDataSource(
+    fun provideDreamsLocalDataSource(
         database: LocalDatabase,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): DreamsDataSource {
         return DreamsLocalDataSource(database.dreamsDao(), ioDispatcher)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTagsLocalDataSource(
+        database: LocalDatabase,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): TagsDataSource {
+        return TagsLocalDataSource(database.tagsDao(), ioDispatcher)
     }
 }
 

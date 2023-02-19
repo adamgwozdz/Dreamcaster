@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.agiletech.dreamcaster.data.Result
 import com.agiletech.dreamcaster.data.Result.Success
 import com.agiletech.dreamcaster.data.entities.Dream
+import com.agiletech.dreamcaster.data.entities.Tag
+import com.agiletech.dreamcaster.data.entities.relations.DreamWithTags
 import com.agiletech.dreamcaster.domain.repository.DreamsRepository
 import com.agiletech.dreamcaster.util.Async
 import com.agiletech.dreamcaster.util.WhileUiSubscribed
@@ -13,13 +15,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 /**
  * UiState for the dream list screen.
  */
 data class DreamsUiState(
-    val items: List<Dream> = emptyList(),
+    val items: List<DreamWithTags> = emptyList(),
     val isLoading: Boolean = false,
 )
 
@@ -37,14 +40,14 @@ class DreamsListViewModel @Inject constructor(
         .map {
             checkDreamsStream(it)
         }
-        .onStart<Async<List<Dream>>> { emit(Async.Loading) }
+        .onStart<Async<List<DreamWithTags>>> { emit(Async.Loading) }
         .catch { e ->
             Timber.d("Error while loading dreamsStream")
             if (e is IllegalArgumentException) throw e
             else emit(Async.Success(emptyList()))
         }
 
-    private fun checkDreamsStream(x: Result<List<Dream>>): Async.Success<List<Dream>> {
+    private fun checkDreamsStream(x: Result<List<DreamWithTags>>): Async.Success<List<DreamWithTags>> {
         return if (x is Success) Async.Success(x.data) else Async.Success(emptyList())
     }
 
@@ -70,7 +73,11 @@ class DreamsListViewModel @Inject constructor(
         )
 
     fun createNewDream() = viewModelScope.launch {
-        val newDream = Dream(title = "Test", content = "Description")
-        dreamsRepository.saveDream(newDream)
+        val id = UUID.randomUUID().toString()
+        val dream = Dream(id = id, title = "Test", content = "Description")
+        val tag1 = Tag(dreamId = id, name = "tag1")
+        val tag2 = Tag(dreamId = id, name = "tag2")
+        val tags = listOf(tag1, tag2)
+        dreamsRepository.saveDream(dream, tags)
     }
 }
