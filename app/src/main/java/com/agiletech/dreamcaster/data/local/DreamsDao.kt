@@ -20,14 +20,6 @@ interface DreamsDao {
     fun observeDreams(): Flow<List<DreamWithTags>>
 
     /**
-     * Selects all dreams from the dreams table.
-     *
-     * @return all dreams
-     */
-    @Query("SELECT * FROM Dreams")
-    fun getDreams(): List<DreamWithTags>
-
-    /**
      * Insert a dream into the database. If the dream already exists, replace it.
      *
      * @param dream the dream to be inserted.

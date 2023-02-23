@@ -23,14 +23,6 @@ class DreamsRepositoryImpl(
         return dreamsLocalDataSource.getDreamsStream()
     }
 
-    override suspend fun getDreams(): Result<List<DreamWithTags>> {
-        return try {
-            dreamsLocalDataSource.getDreams()
-        } catch (e: java.lang.Exception) {
-            Result.Error(e)
-        }
-    }
-
     override suspend fun saveDream(dream: Dream, tags: List<Tag>) {
         coroutineScope {
             launch { dreamsLocalDataSource.saveDream(dream) }

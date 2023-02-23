@@ -8,7 +8,5 @@ interface DreamsDataSource {
 
     fun getDreamsStream(): Flow<Result<List<DreamWithTags>>>
 
-    suspend fun getDreams(): Result<List<DreamWithTags>>
-
     suspend fun saveDream(dream: Dream)
 }
