@@ -1,9 +1,9 @@
-package com.agiletech.dreamcaster.data.local
+package com.agiletech.dreamcaster.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import com.agiletech.dreamcaster.data.entities.Tag
+import com.agiletech.dreamcaster.data.database.entity.TagEntity
 
 @Dao
 interface TagsDao {
@@ -14,5 +14,5 @@ interface TagsDao {
      * @param tag the tag to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTag(tag: Tag)
+    suspend fun insertTag(tag: TagEntity)
 }

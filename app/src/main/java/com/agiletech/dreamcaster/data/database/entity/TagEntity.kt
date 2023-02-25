@@ -1,4 +1,4 @@
-package com.agiletech.dreamcaster.data.entities
+package com.agiletech.dreamcaster.data.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -13,7 +13,7 @@ import java.util.*
  * @param name name of a tag
  */
 @Entity(tableName = "tags")
-data class Tag @JvmOverloads constructor(
+data class TagEntity @JvmOverloads constructor(
     @PrimaryKey @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "dreamId") var dreamId: String = "",
     @ColumnInfo(name = "name") var name: String = ""

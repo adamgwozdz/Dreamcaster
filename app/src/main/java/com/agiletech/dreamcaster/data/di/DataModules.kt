@@ -1,14 +1,13 @@
-package com.agiletech.dreamcaster.di
+package com.agiletech.dreamcaster.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.agiletech.dreamcaster.data.DreamsDataSource
-import com.agiletech.dreamcaster.data.TagsDataSource
-import com.agiletech.dreamcaster.data.local.DreamsLocalDataSource
-import com.agiletech.dreamcaster.data.local.LocalDatabase
-import com.agiletech.dreamcaster.data.local.TagsLocalDataSource
-import com.agiletech.dreamcaster.data.repository.DreamsRepositoryImpl
-import com.agiletech.dreamcaster.domain.repository.DreamsRepository
+import com.agiletech.dreamcaster.data.database.data_source.DreamsDataSource
+import com.agiletech.dreamcaster.data.database.data_source.DreamsLocalDataSource
+import com.agiletech.dreamcaster.data.database.LocalDatabase
+import com.agiletech.dreamcaster.data.repository.DefaultDreamsRepository
+import com.agiletech.dreamcaster.data.repository.DreamsRepository
+import com.agiletech.dreamcaster.util.di.IoDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,10 +24,9 @@ object RepositoryModule {
     @Provides
     fun provideDreamsRepository(
         dreamsLocalDataSource: DreamsDataSource,
-        tagsLocalDataSource: TagsDataSource,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): DreamsRepository {
-        return DreamsRepositoryImpl(dreamsLocalDataSource, tagsLocalDataSource, ioDispatcher)
+        return DefaultDreamsRepository(dreamsLocalDataSource, ioDispatcher)
     }
 }
 
@@ -42,16 +40,7 @@ object DataSourceModule {
         database: LocalDatabase,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): DreamsDataSource {
-        return DreamsLocalDataSource(database.dreamsDao(), ioDispatcher)
-    }
-
-    @Singleton
-    @Provides
-    fun provideTagsLocalDataSource(
-        database: LocalDatabase,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ): TagsDataSource {
-        return TagsLocalDataSource(database.tagsDao(), ioDispatcher)
+        return DreamsLocalDataSource(database.dreamsDao(), database.tagsDao(), ioDispatcher)
     }
 }
 

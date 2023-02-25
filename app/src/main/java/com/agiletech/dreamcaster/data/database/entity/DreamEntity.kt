@@ -1,4 +1,4 @@
-package com.agiletech.dreamcaster.data.entities
+package com.agiletech.dreamcaster.data.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -21,7 +21,7 @@ import java.util.*
  */
 
 @Entity(tableName = "dreams")
-data class Dream @JvmOverloads constructor(
+data class DreamEntity @JvmOverloads constructor(
     @PrimaryKey @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "title") var title: String = "",
     @ColumnInfo(name = "content") var content: String = "",

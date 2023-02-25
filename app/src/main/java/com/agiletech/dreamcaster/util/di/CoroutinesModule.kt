@@ -1,4 +1,4 @@
-package com.agiletech.dreamcaster.di
+package com.agiletech.dreamcaster.util.di
 
 import dagger.Module
 import dagger.Provides

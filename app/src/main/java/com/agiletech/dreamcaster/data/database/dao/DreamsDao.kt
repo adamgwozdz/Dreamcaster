@@ -1,11 +1,11 @@
-package com.agiletech.dreamcaster.data.local
+package com.agiletech.dreamcaster.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.agiletech.dreamcaster.data.entities.Dream
-import com.agiletech.dreamcaster.data.entities.relations.DreamWithTags
+import com.agiletech.dreamcaster.data.database.entity.DreamEntity
+import com.agiletech.dreamcaster.data.model.Dream
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,7 +17,7 @@ interface DreamsDao {
      * @return all dreams
      */
     @Query("SELECT * FROM Dreams")
-    fun observeDreams(): Flow<List<DreamWithTags>>
+    fun observeDreams(): Flow<List<Dream>>
 
     /**
      * Insert a dream into the database. If the dream already exists, replace it.
@@ -25,5 +25,5 @@ interface DreamsDao {
      * @param dream the dream to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDream(dream: Dream)
+    suspend fun insertDream(dream: DreamEntity)
 }
